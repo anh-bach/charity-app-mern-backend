@@ -4,21 +4,26 @@
   "description": "Sever code base for charity app",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start:server": "nodemon server.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "bcrypt": "^5.0.1",
     "cors": "^2.8.5",
+    "crypto": "^1.0.1",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
+    "html-to-text": "^8.0.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.0.8",
+    "nodemailer": "^6.6.5",
     "nodemon": "^2.0.13",
-    "stripe": "^8.176.0"
+    "pug": "^3.0.2",
+    "stripe": "^8.176.0",
+    "validator": "^13.6.0"
   },
   "devDependencies": {
-    "concurrently": "^6.2.2",
     "morgan": "^1.10.0"
   }
 }
