@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const morgan = require('morgan');
+const cookieParser = require('cookie-parser');
 require('dotenv').config();
 const { readdirSync } = require('fs');
 
@@ -19,6 +20,7 @@ mongoose
 //middlewares
 app.use(express.json({ limit: '2mb' }));
 app.use(cors());
+app.use(cookieParser());
 app.use(morgan('dev'));
 
 //routes middlewares

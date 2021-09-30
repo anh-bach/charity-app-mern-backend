@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^5.0.1",
+    "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
     "crypto": "^1.0.1",
     "dotenv": "^10.0.0",
@@ -20,6 +21,7 @@
     "nodemailer": "^6.6.5",
     "nodemon": "^2.0.13",
     "pug": "^3.0.2",
+    "slugify": "^1.6.0",
     "stripe": "^8.176.0",
     "validator": "^13.6.0"
   },
