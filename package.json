@@ -3,8 +3,13 @@
   "version": "1.0.0",
   "description": "Sever code base for charity app",
   "main": "server.js",
+  "engines": {
+    "npm": "6.14.15",
+    "node": "14.17.6"
+  },
   "scripts": {
-    "start:server": "nodemon server.js"
+    "start": "node server.js",
+    "dev": "nodemon server.js"
   },
   "author": "",
   "license": "ISC",
