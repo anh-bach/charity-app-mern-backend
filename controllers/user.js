@@ -1,5 +1,5 @@
-const User = require('../models/User');
-const AppError = require('../utils/AppError');
+const User = require('../models/user');
+const AppError = require('../utils/appError');
 const catchAsync = require('../utils/catchAsync');
 
 //Helper function to filter unwanted property
