@@ -1,7 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-const morgan = require('morgan');
 require('dotenv').config();
 const { readdirSync } = require('fs');
 
@@ -19,7 +18,11 @@ mongoose
 //middlewares
 app.use(express.json({ limit: '2mb' }));
 app.use(cors());
-app.use(morgan('dev'));
+
+if (process.env.NODE_ENV === 'development') {
+  const morgan = require('morgan');
+  app.use(morgan('dev'));
+}
 
 //routes middlewares
 readdirSync('./routes').map((route) => {
