@@ -25,6 +25,7 @@ const createSendToken = (user, statusCode, req, res, rememberMe = true) => {
       ),
       httpOnly: true, //unable to manipulate the cookie from client side
       secure: req.secure || req.headers['x-forwarded-proto'] === 'https',
+      sameSite: 'None',
     };
 
     if ((process.env.NODE_ENV = 'production')) cookieOptions.secure = true;
