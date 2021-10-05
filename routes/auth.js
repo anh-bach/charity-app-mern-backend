@@ -26,8 +26,6 @@ const router = express.Router();
 router.post('/register', register);
 //signin route
 router.post('/login', login);
-//logout route
-router.get('/logout', logout);
 //forgot password
 router.post('/forgotPassword', forgotPassword);
 //reset password
@@ -36,6 +34,8 @@ router.patch('/resetPassword/:token', resetPassword);
 //Protect all routes after this middleware
 router.use(protect);
 
+//logout route
+router.get('/logout', logout);
 //Update password
 router.patch('/updateMyPassword', updatePassword);
 //Update current user data

@@ -14,21 +14,27 @@ const signToken = (id) => {
 };
 
 //Helper function to create and send token back to the user as cookie
-const createSendToken = (user, statusCode, req, res) => {
+const createSendToken = (user, statusCode, req, res, rememberMe = true) => {
   const token = signToken(user._id);
 
-  const cookieOptions = {
-    expires: new Date(
-      Date.now() + process.env.JWT_EXPIRES_IN * 24 * 60 * 60 * 1000
-    ),
-    httpOnly: true, //unable to manipulate the cookie from client side
-    secure: req.secure || req.headers['x-forwarded-proto'] === 'https',
-  };
+  //remember Me
+  if (rememberMe) {
+    const cookieOptions = {
+      expires: new Date(
+        Date.now() + process.env.JWT_EXPIRES_IN * 24 * 60 * 60 * 1000
+      ),
+      httpOnly: true, //unable to manipulate the cookie from client side
+      secure: req.secure || req.headers['x-forwarded-proto'] === 'https',
+    };
 
-  if ((process.env.NODE_ENV = 'production')) cookieOptions.secure = true;
+    if ((process.env.NODE_ENV = 'production')) cookieOptions.secure = true;
 
-  //send the token within cookie, named jwt
-  res.cookie('jwt', token, cookieOptions);
+    //send the token within cookie, named jwt
+    res.cookie('jwt', token, cookieOptions);
+  } else {
+    //clear the old jwt in cookies
+    res.clearCookie('jwt');
+  }
 
   //remove password from response
   user.password = undefined;
@@ -68,30 +74,28 @@ exports.register = catchAsync(async (req, res, next) => {
 
 //II))) Login Handler
 exports.login = catchAsync(async (req, res, next) => {
-  const { email, password } = req.body;
+  const { email, password, remember } = req.body;
 
-  //1)))) check if email or password provided
+  //1)))) check if email or password provided - verbose
   if (!email || !password) {
-    return next(new AppError('Pleas provide email and password', 400));
+    throw new AppError('Please provide email and password', 400);
   }
 
   //2)))) Check if user exists and password correct
   const user = await User.findOne({ email }).select('+password');
 
   if (!user || !(await user.comparePassword(password, user.password))) {
-    return next(new AppError('Incorrect email or password', 401));
+    throw new AppError('Incorrect email or password', 401);
   }
 
   //3)))) if everything is ok, send login token to client
-  createSendToken(user, 200, req, res);
+  createSendToken(user, 200, req, res, remember);
 }, 'From Login controller--->');
 
 //III))) Logout controller
 exports.logout = (req, res, next) => {
-  res.cookie('jwt', 'loggedout', {
-    expires: new Date(Date.now() + 10 * 1000),
-    httpOnly: true,
-  });
+  // clear the cookie
+  res.clearCookie('jwt');
   res.status(200).json({ status: 'success' });
 };
 

@@ -4,6 +4,7 @@ module.exports = (fn, logMessage) => {
       console.log(logMessage);
       console.log(error);
       next(error);
+      res.status(error.statusCode).json({ errorMessage: error.message });
     });
   };
 };
