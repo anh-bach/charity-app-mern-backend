@@ -30,12 +30,12 @@ router.post('/login', login);
 router.post('/forgotPassword', forgotPassword);
 //reset password
 router.patch('/resetPassword/:token', resetPassword);
+//logout route
+router.get('/logout', logout);
 
 //Protect all routes after this middleware
 router.use(protect);
 
-//logout route
-router.get('/logout', logout);
 //Update password
 router.patch('/updateMyPassword', updatePassword);
 //Update current user data
