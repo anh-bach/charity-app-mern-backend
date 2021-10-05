@@ -25,12 +25,12 @@ const createSendToken = (user, statusCode, req, res, rememberMe = true) => {
       ),
       httpOnly: true, //unable to manipulate the cookie from client side
       secure: req.secure || req.headers['x-forwarded-proto'] === 'https',
-      sameSite: 'None',
+      sameSite: 'none',
     };
 
     if ((process.env.NODE_ENV = 'production')) cookieOptions.secure = true;
 
-    //send the token within cookie, named jwt
+    //save the token in browser cookie, named jwt
     res.cookie('jwt', token, cookieOptions);
   } else {
     //clear the old jwt in cookies

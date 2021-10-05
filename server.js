@@ -9,6 +9,9 @@ const { readdirSync } = require('fs');
 //app initialization
 const app = express();
 
+//enables the use of "X-Forwarded-Proto" for req.protocol and res.redirect url construction
+app.enable('trust proxy');
+
 //database - connection
 mongoose
   .connect(
