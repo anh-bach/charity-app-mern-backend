@@ -20,9 +20,7 @@ const createSendToken = (user, statusCode, req, res, rememberMe = true) => {
   //remember Me
   if (rememberMe) {
     const cookieOptions = {
-      expires: new Date(
-        Date.now() + process.env.JWT_EXPIRES_IN * 24 * 60 * 60 * 1000
-      ),
+      maxAge: process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000,
       httpOnly: true, //unable to manipulate the cookie from client side
       secure: req.secure || req.headers['x-forwarded-proto'] === 'https',
       sameSite: 'none',
@@ -116,8 +114,9 @@ exports.protect = catchAsync(async (req, res, next) => {
   }
 
   if (!token || token === 'null' || token === null) {
-    return next(
-      new AppError('You are not logged in. Please login to get access', 401)
+    throw new AppError(
+      'You are not logged in. Please login to get access',
+      401
     );
   }
 
