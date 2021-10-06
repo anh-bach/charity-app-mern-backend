@@ -17,23 +17,24 @@ const signToken = (id) => {
 const createSendToken = (user, statusCode, req, res, rememberMe = true) => {
   const token = signToken(user._id);
 
+  const cookieOptions = {
+    expires: 0,
+    httpOnly: true, //unable to manipulate the cookie from client side
+    secure: req.secure || req.headers['x-forwarded-proto'] === 'https',
+    sameSite: 'none',
+  };
+
+  if ((process.env.NODE_ENV = 'production')) cookieOptions.secure = true;
+
   //remember Me
   if (rememberMe) {
-    const cookieOptions = {
-      maxAge: process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000,
-      httpOnly: true, //unable to manipulate the cookie from client side
-      secure: req.secure || req.headers['x-forwarded-proto'] === 'https',
-      sameSite: 'none',
-    };
-
-    if ((process.env.NODE_ENV = 'production')) cookieOptions.secure = true;
-
-    //save the token in browser cookie, named jwt
-    res.cookie('jwt', token, cookieOptions);
-  } else {
-    //clear the old jwt in cookies
-    res.clearCookie('jwt');
+    cookieOptions.expires = new Date(
+      Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000
+    );
   }
+
+  //save the token in browser cookie, named jwt
+  res.cookie('jwt', token, cookieOptions);
 
   //remove password from response
   user.password = undefined;
@@ -51,7 +52,14 @@ exports.register = catchAsync(async (req, res, next) => {
   const { name, email, password, passwordConfirm, passwordChangedAt, role } =
     req.body;
 
-  const user = await User.create({
+  //if user exists
+  let user = await User.findOne({ email });
+  console.log('from register', user);
+  if (user) {
+    throw new AppError('This email already exists!', 401);
+  }
+
+  user = await User.create({
     name,
     email,
     password,
@@ -61,7 +69,7 @@ exports.register = catchAsync(async (req, res, next) => {
   });
 
   //Sending welcome email
-  let url = `${req.protocol}://localhost:8000/me`;
+  let url = `${req.protocol}://localhost:3000/me`;
   if (process.env.NODE_ENV === 'production') {
     url = `${req.protocol}://${req.get('host')}/me`;
   }
