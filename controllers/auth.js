@@ -54,7 +54,7 @@ exports.register = catchAsync(async (req, res, next) => {
 
   //if user exists
   let user = await User.findOne({ email });
-  console.log('from register', user);
+
   if (user) {
     throw new AppError('This email already exists!', 401);
   }
@@ -69,10 +69,8 @@ exports.register = catchAsync(async (req, res, next) => {
   });
 
   //Sending welcome email
-  let url = `${req.protocol}://localhost:3000/me`;
-  if (process.env.NODE_ENV === 'production') {
-    url = `${req.protocol}://${req.get('host')}/me`;
-  }
+
+  const url = `${req.get('origin')}/me`;
   await new Email(user, url).sendWelcome();
 
   //create a JWT - keep the new user logged in
@@ -130,7 +128,6 @@ exports.protect = catchAsync(async (req, res, next) => {
 
   //2)))) Verificate token
   const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
-  console.log('decoded token--->', decoded);
 
   //3)))) check if user still exists
   const user = await User.findById(decoded.id);
@@ -173,7 +170,7 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
   const user = await User.findOne({ email: req.body.email });
 
   if (!user) {
-    return next(new AppError('There is no user with this email address.', 404));
+    throw new AppError('There is no user with this email address.', 404);
   }
 
   //2))) Generate the random reset token
@@ -182,26 +179,23 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
 
   //3))) Send the reset token to user email
   try {
-    const resetUrl = `${req.protocol}://${req.get(
-      'host'
-    )}/api/resetPassword/${resetToken}`;
+    const resetUrl = `${req.get('origin')}/reset-password/${resetToken}`;
 
     await new Email(user, resetUrl).sendPasswordReset();
 
     res.status(200).json({
       status: 'success',
-      message: 'Token sent to email',
+      message:
+        'Please check your email and follow instructions to reset your password.',
     });
   } catch (error) {
     user.passwordResetToken = undefined;
     user.passwordResetExpires = undefined;
     await user.save({ validateBeforeSave: false });
 
-    return next(
-      new AppError(
-        'There was an error sending the email. Please try again later',
-        500
-      )
+    throw new AppError(
+      'There was an error sending the email. Please try again later',
+      500
     );
   }
 }, 'From forgot password controller--->');
@@ -220,7 +214,10 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
 
   //2)))) If the token is not expired and there is such user, reset the password
   if (!user) {
-    return next(new AppError('Token is invalid or expired', 4000));
+    throw new AppError(
+      'Your reset token is invalid or expired. Please request new email!',
+      400
+    );
   }
 
   user.password = req.body.password;

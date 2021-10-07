@@ -33,7 +33,7 @@ router.patch('/resetPassword/:token', resetPassword);
 //logout route
 router.get('/logout', logout);
 
-//Protect all routes after this middleware
+//))))Protect all routes after this middleware
 router.use(protect);
 
 //Update password
