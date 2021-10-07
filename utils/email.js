@@ -7,7 +7,7 @@ module.exports = class Email {
     this.to = user.email;
     this.name = user.name;
     this.url = url;
-    this.from = `Anh Bach <${process.env.EMAIL_FROM}>`;
+    this.from = `My Happy Fund <${process.env.EMAIL_FROM}>`;
   }
 
   //create transporter according to environment mode

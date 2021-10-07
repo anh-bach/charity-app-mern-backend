@@ -100,7 +100,7 @@ exports.login = catchAsync(async (req, res, next) => {
 //III))) Logout controller
 exports.logout = (req, res, next) => {
   // clear the cookie
-  res.clearCookie('jwt');
+  res.clearCookie('jwt', { path: '/' });
   res.status(200).json({ status: 'success' });
 };
 
