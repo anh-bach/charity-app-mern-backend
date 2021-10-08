@@ -1,6 +1,7 @@
 const User = require('../models/user');
 const AppError = require('../utils/appError');
 const catchAsync = require('../utils/catchAsync');
+const APIFeatures = require('../utils/apiFeatures');
 
 //Helper function to filter unwanted property
 const filterObj = (obj, ...allowedFields) => {
