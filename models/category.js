@@ -20,6 +20,9 @@ const categorySchema = new mongoose.Schema(
   }
 );
 
+//Using indexes to speed up querying data
+categorySchema.index({ slug: 1 });
+
 //Make a model
 const Category = mongoose.model('Category', categorySchema);
 //Export model

@@ -28,6 +28,11 @@ const campaignSchema = new mongoose.Schema(
     createdBy: {
       type: ObjectId,
       ref: 'User',
+      required: [true, 'A campaign must belong to a user'],
+    },
+    imageCover: {
+      type: String,
+      required: [true, 'A tour must have a cover image'],
     },
     images: [String],
     from: Date,
@@ -37,14 +42,21 @@ const campaignSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    status: {
+      type: String,
+      enum: ['pending', 'approved', 'rejected'],
+      default: 'pending',
+    },
     category: {
       type: ObjectId,
       ref: 'Category',
+      required: [true, 'A campaign must belong to a category'],
     },
     subs: [
       {
         type: ObjectId,
         ref: 'Sub',
+        required: [true, 'A campaign must belong to one sub category'],
       },
     ],
   },
@@ -53,7 +65,7 @@ const campaignSchema = new mongoose.Schema(
   }
 );
 
-//Using indexes to query data
+//Using indexes to speed up querying data
 campaignSchema.index({ slug: 1 });
 
 //Create slug for campagin
