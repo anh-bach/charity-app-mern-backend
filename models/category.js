@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const slugify = require('slugify');
 
 const categorySchema = new mongoose.Schema(
   {
@@ -22,6 +23,12 @@ const categorySchema = new mongoose.Schema(
 
 //Using indexes to speed up querying data
 categorySchema.index({ slug: 1 });
+
+//Create slug for category
+categorySchema.pre('save', function (next) {
+  this.slug = slugify(this.name, { lower: true });
+  next();
+});
 
 //Make a model
 const Category = mongoose.model('Category', categorySchema);

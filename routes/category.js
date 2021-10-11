@@ -13,15 +13,14 @@ const router = express.Router();
 //Protect all routes after this middleware
 router.use(protect);
 
-//User route - category + sub category
-router.get('/categories', list);
-router.get('/category/:slug', read);
-
 //restrict all routes to only admin after this middleware
 router.use(restrictTo('admin'));
 
 //Admin route
-//create category
+//get categories
+router.get('/admin/categories', list);
+router.get('/admin/category/:slug', read);
+//create + update + delete category
 router.post('/admin/category', create);
 router.patch('/admin/category/:slug', update);
 router.delete('/admin/category/:slug', remove);
