@@ -25,6 +25,10 @@ const campaignSchema = new mongoose.Schema(
       required: [true, 'Please provide target for your campaign'],
       trim: true,
     },
+    donatedAmount: {
+      type: Number,
+      default: 0,
+    },
     createdBy: {
       type: ObjectId,
       ref: 'User',
@@ -37,7 +41,7 @@ const campaignSchema = new mongoose.Schema(
     images: [String],
     from: Date,
     to: Date,
-    location: {},
+    location: '',
     active: {
       type: Boolean,
       default: false,
@@ -52,13 +56,6 @@ const campaignSchema = new mongoose.Schema(
       ref: 'Category',
       required: [true, 'A campaign must belong to a category'],
     },
-    subs: [
-      {
-        type: ObjectId,
-        ref: 'Sub',
-        required: [true, 'A campaign must belong to one sub category'],
-      },
-    ],
   },
   {
     timestamps: true,

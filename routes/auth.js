@@ -33,21 +33,25 @@ router.patch('/resetPassword/:token', resetPassword);
 //logout route
 router.get('/logout', logout);
 
-//))))Protect all routes after this middleware
-router.use(protect);
-
+//User routes
 //Update password
-router.patch('/updateMyPassword', updatePassword);
+router.patch('/updateMyPassword', protect, updatePassword);
 //Update current user data
-router.patch('/updateMe', updateMe);
+router.patch('/updateMe', protect, updateMe);
 //Get current user data
-router.get('/me', getMe, getOneUser);
+router.get('/me', protect, getMe, getOneUser);
 //Delete current user account
-router.delete('/deleteMe', deleteMe);
+router.delete('/deleteMe', protect, deleteMe);
 
-//restrict all routes to only admin after this middleware
-router.use(restrictTo('admin'));
-router.route('/users').get(getAllUsers).post(createUser);
-router.route('/users/:id').get(getOneUser).patch(updateUser).delete(deleteUser);
+//Admin routes
+router
+  .route('/users')
+  .get(protect, restrictTo('admin'), getAllUsers)
+  .post(protect, restrictTo('admin'), createUser);
+router
+  .route('/users/:id')
+  .get(protect, restrictTo('admin'), getOneUser)
+  .patch(protect, restrictTo('admin'), updateUser)
+  .delete(protect, restrictTo('admin'), deleteUser);
 
 module.exports = router;

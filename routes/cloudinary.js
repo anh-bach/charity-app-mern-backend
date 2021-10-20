@@ -5,10 +5,9 @@ const { protect } = require('../controllers/auth');
 
 const router = express.Router();
 
-//protect routes after this middlewares
-router.use(protect);
+//user routes
 
-router.post('/upload-images', upload);
-router.post('/remove-image', remove);
+router.post('/upload-images', protect, upload);
+router.post('/remove-image', protect, remove);
 
 module.exports = router;

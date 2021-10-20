@@ -107,6 +107,7 @@ exports.logout = (req, res, next) => {
 //IV))) Middleware to protect route -> only grant access to logged in users
 exports.protect = catchAsync(async (req, res, next) => {
   //1)))) Get the token and whether its there
+
   let token;
   if (
     req.headers.authorization &&
@@ -121,7 +122,7 @@ exports.protect = catchAsync(async (req, res, next) => {
 
   if (!token || token === 'null' || token === null) {
     throw new AppError(
-      'You are not logged in. Please login to get access',
+      'You are not logged in. Please logged in to get access!',
       401
     );
   }
@@ -133,15 +134,17 @@ exports.protect = catchAsync(async (req, res, next) => {
   const user = await User.findById(decoded.id);
 
   if (!user) {
-    return next(
-      new AppError('The user belongs to this token does no longer exist', 401)
+    throw new AppError(
+      'The user belongs to this token does no longer exist',
+      401
     );
   }
 
   //4)))) check if the user changes password after the token is issued
   if (user.changesPasswordAfter(decoded.iat)) {
-    return next(
-      new AppError('User recently changed password. Please login again.', 401)
+    throw new AppError(
+      'User recently changed password. Please login again.',
+      401
     );
   }
 
@@ -154,9 +157,11 @@ exports.protect = catchAsync(async (req, res, next) => {
 //V))) Grant access to specific route to specific user
 exports.restrictTo = (...roles) => {
   return (req, res, next) => {
+    console.log('restrict gets called', roles);
     if (!roles.includes(req.user.role)) {
-      return next(
-        new AppError('You do not have permission to access this route.', 403)
+      throw new AppError(
+        'You do not have permission to access this route.',
+        403
       );
     }
 

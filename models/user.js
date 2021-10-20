@@ -76,7 +76,9 @@ const userSchema = new mongoose.Schema(
 //1))))hashing password when user register for the first time or when user update password
 userSchema.pre('save', async function (next) {
   //only hashing password if the password is modified
-  if (!this.isModified('password')) return next();
+  if (!this.isModified('password')) {
+    return next();
+  }
 
   try {
     //hash the password with cost of 12
@@ -92,7 +94,9 @@ userSchema.pre('save', async function (next) {
 
 //2)))) Update the passwordChangedAt property if it happens
 userSchema.pre('save', function (next) {
-  if (!this.isModified('password') || this.isNew) return next();
+  if (!this.isModified('password') || this.isNew) {
+    return next();
+  }
 
   this.passwordChangedAt = Date.now() - 1000;
   next();
