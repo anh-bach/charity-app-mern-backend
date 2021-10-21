@@ -24,12 +24,12 @@ exports.getAllUsers = catchAsync(async (req, res, next) => {
     .paginate();
 
   //execute the query
-  const docs = await features.query;
+  const users = await features.query;
   //send response
   res.status(200).json({
     status: 'success',
-    results: docs.length,
-    data: { docs },
+    results: users.length,
+    data: { users },
   });
 }, 'From getAll user controller');
 

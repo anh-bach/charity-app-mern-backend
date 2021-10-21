@@ -157,7 +157,6 @@ exports.protect = catchAsync(async (req, res, next) => {
 //V))) Grant access to specific route to specific user
 exports.restrictTo = (...roles) => {
   return (req, res, next) => {
-    console.log('restrict gets called', roles);
     if (!roles.includes(req.user.role)) {
       throw new AppError(
         'You do not have permission to access this route.',

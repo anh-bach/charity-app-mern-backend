@@ -35,10 +35,10 @@ const campaignSchema = new mongoose.Schema(
       required: [true, 'A campaign must belong to a user'],
     },
     imageCover: {
-      type: String,
+      type: Object,
       required: [true, 'A tour must have a cover image'],
     },
-    images: [String],
+    images: [Object],
     from: Date,
     to: Date,
     location: '',
