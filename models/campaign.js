@@ -16,6 +16,10 @@ const campaignSchema = new mongoose.Schema(
       type: String,
       unique: true,
     },
+    slogan: {
+      type: String,
+      required: [true, 'Please provide a campaign slogan'],
+    },
     description: {
       type: String,
       required: [true, 'Please provide campaign description'],
