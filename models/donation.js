@@ -13,6 +13,13 @@ const donationSchema = new mongoose.Schema(
       ref: 'Campaign',
       required: [true, 'A donation should belong to a campaign'],
     },
+    amount: {
+      type: Number,
+      required: [true, 'How much is donation?'],
+    },
+    billInfo: {
+      type: Object,
+    },
   },
   {
     timestamps: true,

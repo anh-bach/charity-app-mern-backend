@@ -9,6 +9,9 @@ const {
   approveCampaignByAdmin,
   countApprovedCampaigns,
   getCampaign,
+  updateCampaignByUser,
+  makeDonation,
+  getTotalActiveCampaignsByUser,
 } = require('../controllers/campaign');
 const { protect, restrictTo } = require('../controllers/auth');
 
@@ -21,8 +24,15 @@ router.get('/campaign/:slug', getCampaign);
 
 //user routes
 router.post('/create-campaign', protect, createCampaign);
+router.post('/donate-campaign/:slug', protect, makeDonation);
 router.get('/get-campaign-by-user/:slug', protect, getCampaignByUser);
 router.get('/get-campaigns-by-user', protect, getCampaignsByUser);
+router.get(
+  '/get-total-active-campaigns-by-user/:userId',
+  protect,
+  getTotalActiveCampaignsByUser
+);
+router.patch('/update-campaign-by-user/:slug', protect, updateCampaignByUser);
 
 //admin routes
 router.get(
