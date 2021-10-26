@@ -151,7 +151,6 @@ exports.getTotalActiveCampaignsByUser = catchAsync(async (req, res) => {
 
 exports.getCampaignByUser = catchAsync(async (req, res) => {
   const campaign = await Campaign.findOne({
-    createdBy: req.user._id,
     slug: req.params.slug,
   })
     .populate('category', 'name')
