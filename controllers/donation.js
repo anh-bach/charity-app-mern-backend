@@ -31,3 +31,28 @@ exports.getDonationsByCampaign = catchAsync(async (req, res) => {
     data: donations,
   });
 }, 'From get donations by campaign');
+
+exports.getDonationsByUser = catchAsync(async (req, res) => {
+  const filters = { donatedBy: req.params.userId };
+
+  const features = new APIFeatures(
+    Donation.find(filters).populate({
+      path: 'donatedTo',
+      select: 'title slug createdBy',
+      populate: { path: 'createdBy', select: 'name' },
+    }),
+    req.query
+  )
+    .filter()
+    .sort()
+    .limitFields()
+    .paginate();
+
+  //execute the query
+  const donations = await features.query;
+
+  res.status(200).json({
+    status: 'success',
+    data: donations,
+  });
+}, 'From get donations by campaign');
