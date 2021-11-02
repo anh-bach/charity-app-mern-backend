@@ -21,17 +21,17 @@ const router = express.Router();
 router.get('/campaigns', getCampaigns);
 router.get('/count-active-campaigns', countApprovedCampaigns);
 router.get('/campaign/:slug', getCampaign);
+router.get(
+  '/get-total-active-campaigns-by-user/:userId',
+  getTotalActiveCampaignsByUser
+);
 
 //user routes
 router.post('/create-campaign', protect, createCampaign);
 router.post('/donate-campaign/:slug', protect, makeDonation);
 router.get('/get-campaign-by-user/:slug', protect, getCampaignByUser);
 router.get('/get-campaigns-by-user/', protect, getCampaignsByUser);
-router.get(
-  '/get-total-active-campaigns-by-user/:userId',
-  protect,
-  getTotalActiveCampaignsByUser
-);
+
 router.patch('/update-campaign-by-user/:slug', protect, updateCampaignByUser);
 
 //admin routes
