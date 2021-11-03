@@ -1,3 +1,7 @@
-# Charity App - A Web Application For Fund-draising campaign.
+# MyHappyFund - A Web Application For Raising Community Supports For Amazing Personal Projects.
 
-[![Nodeapp CI](https://github.com/iamanh1990/charity-app-mern-backend/actions/workflows/ci.yml/badge.svg)](https://github.com/iamanh1990/charity-app-mern-backend/actions/workflows/ci.yml)
+### Server: Node and Express.
+
+### Database: MongoDB.
+
+### Deployment: Heroku.
